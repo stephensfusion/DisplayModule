@@ -1,0 +1,431 @@
+/*
+ * <nano-module> styles. Sizes and dark colours follow the Figma file
+ * "Nano Service Req 5 - Module design with its interactions". Light colours
+ * are the BDS (bds.css 32.1.19) light values of the same tokens, because the
+ * Figma file has no light frames (AMBIGUITY_LOG.md A-14).
+ *
+ * Every colour reads a `--nano-module-*` custom property first. Their default
+ * values are also published in `display-module/styles/display-module.css`.
+ * No transitions are used on colours, so a state change is visible at once.
+ */
+
+/* Dark theme: also the default when neither `dark` nor `light` is set. */
+:host {
+  --_bg: var(--nano-module-bg, #0c111d);
+  --_band-bg: var(--nano-module-band-bg, #333741);
+  --_border: var(--nano-module-border, #333741);
+  --_selected-border: var(--nano-module-selected-border, #ffffff);
+  --_edit-border: var(--nano-module-edit-border, #38bdf8);
+  --_text: var(--nano-module-text, #f5f5f6);
+  --_text-muted: var(--nano-module-text-muted, #cecfd2);
+  --_success: var(--nano-module-success, #47cd89);
+  --_grip: var(--nano-module-grip, #ffffff);
+  --_chip-bg: var(--nano-module-chip-bg, #1f235b);
+  --_chip-border: var(--nano-module-chip-border, #2d31a6);
+  --_chip-text: var(--nano-module-chip-text, #a4bcfd);
+  --_chip-port-fill: var(--nano-module-chip-port-fill, #d0dcff);
+  --_port-fill: var(--nano-module-port-fill, #61646c);
+  --_port-stroke: var(--nano-module-port-stroke, #cecfd2);
+  --_port-hover-parameter: var(--nano-module-port-hover-parameter, #f78f08);
+  --_port-hover-io: var(--nano-module-port-hover-io, #17b169);
+  --_tooltip-bg: var(--nano-module-tooltip-bg, #f0f1f1);
+  --_tooltip-text: var(--nano-module-tooltip-text, #161b26);
+  --_badge-bg: var(--nano-module-badge-bg, #000000);
+  --_badge-text: var(--nano-module-badge-text, #ffffff);
+
+  position: relative;
+  z-index: 4;
+  display: inline-flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 190px;
+  vertical-align: top;
+  border: 1px solid var(--_border);
+  border-radius: 8px;
+  background-color: var(--_bg);
+  color: var(--_text);
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 6px;
+  font-weight: 500;
+  line-height: 7px;
+  text-align: left;
+  cursor: pointer;
+}
+
+:host(.light) {
+  --_bg: var(--nano-module-bg, #ffffff);
+  --_band-bg: var(--nano-module-band-bg, #eaecf0);
+  --_border: var(--nano-module-border, #d0d5dd);
+  --_selected-border: var(--nano-module-selected-border, #101828);
+  --_edit-border: var(--nano-module-edit-border, #065986);
+  --_text: var(--nano-module-text, #101828);
+  --_text-muted: var(--nano-module-text-muted, #344054);
+  --_success: var(--nano-module-success, #085d3a);
+  --_grip: var(--nano-module-grip, #101828);
+  --_chip-bg: var(--nano-module-chip-bg, #f9f5ff);
+  --_chip-border: var(--nano-module-chip-border, #d6bbfb);
+  --_chip-text: var(--nano-module-chip-text, #6840c6);
+  --_chip-port-fill: var(--nano-module-chip-port-fill, #d6bbfb);
+  --_port-fill: var(--nano-module-port-fill, #d0d5dd);
+  --_port-stroke: var(--nano-module-port-stroke, #475467);
+  --_port-hover-parameter: var(--nano-module-port-hover-parameter, #db6803);
+  --_port-hover-io: var(--nano-module-port-hover-io, #069454);
+  --_tooltip-bg: var(--nano-module-tooltip-bg, #0c111d);
+  --_tooltip-text: var(--nano-module-tooltip-text, #ffffff);
+  --_badge-bg: var(--nano-module-badge-bg, #ffffff);
+  --_badge-text: var(--nano-module-badge-text, #101828);
+}
+
+/* Select and edit modes: frame colour, stacking above unselected modules, no pointer cursor. */
+:host([data-state='selected']) {
+  z-index: 5;
+  border-color: var(--_selected-border);
+  cursor: default;
+}
+
+:host([data-state='editing']) {
+  z-index: 5;
+  border-color: var(--_edit-border);
+  cursor: default;
+}
+
+/* ------------------------------------------------------------------ badge */
+
+.nm-badge {
+  position: absolute;
+  top: -11px;
+  left: 12px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-sizing: border-box;
+  padding: 4px 6px;
+  border: 1px solid var(--_edit-border);
+  border-radius: 2px;
+  background-color: var(--_badge-bg);
+  color: var(--_badge-text);
+  white-space: nowrap;
+}
+
+.nm-badge__dot {
+  flex: none;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--_edit-border);
+}
+
+/* --------------------------------------------------------------- tooltips */
+
+.nm-tooltip {
+  position: absolute;
+  z-index: 2;
+  box-sizing: border-box;
+  padding: 4px 6px;
+  border-radius: 4px;
+  background-color: var(--_tooltip-bg);
+  color: var(--_tooltip-text);
+  font-size: 6px;
+  font-weight: 600;
+  line-height: 7px;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow:
+    0 12px 16px -4px rgba(16, 24, 40, 0.08),
+    0 4px 6px -2px rgba(16, 24, 40, 0.03);
+  pointer-events: none;
+}
+
+.nm-tooltip--module {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  transform: translateX(-50%);
+}
+
+.nm-tooltip--text {
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nm-tooltip__line {
+  display: block;
+}
+
+/* ----------------------------------------------------------------- header */
+
+.nm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  box-sizing: border-box;
+  min-height: 24px;
+  padding: 7px 8px;
+  border-radius: 7px 7px 0 0;
+  background-color: var(--_band-bg);
+}
+
+.nm-text-wrap {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.nm-title-wrap {
+  flex: 1 1 auto;
+}
+
+.nm-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nm-text--editable {
+  cursor: text;
+}
+
+.nm-title {
+  font-weight: 600;
+  line-height: 8px;
+}
+
+.nm-status-region {
+  flex: none;
+  display: flex;
+  align-items: center;
+}
+
+.nm-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  font-size: 5px;
+  font-weight: 400;
+  line-height: 6px;
+  white-space: nowrap;
+}
+
+.nm-status--saving {
+  color: var(--_text-muted);
+}
+
+.nm-status--saved {
+  color: var(--_success);
+}
+
+.nm-status__icon {
+  display: block;
+  flex: none;
+  width: 6px;
+  height: 6px;
+}
+
+/* ------------------------------------------------------------------- body */
+
+.nm-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.nm-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.nm-section[data-section='parameters'] {
+  position: relative;
+  grid-column: 1 / -1;
+  align-items: flex-start;
+  gap: 4px;
+  min-height: 40px;
+  padding: 6px 8px;
+}
+
+/* Decorative side bars of the parameter band (Figma "Rectangle 301"). */
+.nm-section[data-section='parameters']::before,
+.nm-section[data-section='parameters']::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  width: 3px;
+  height: 28px;
+  background-color: var(--_grip);
+}
+
+.nm-section[data-section='parameters']::before {
+  left: 0;
+  border-radius: 0 2px 2px 0;
+}
+
+.nm-section[data-section='parameters']::after {
+  right: 0;
+  border-radius: 2px 0 0 2px;
+}
+
+.nm-section[data-section='inputs'] {
+  align-items: flex-start;
+  padding: 8px 4px 8px 8px;
+  border-radius: 0 0 0 7px;
+  background-color: var(--_band-bg);
+}
+
+.nm-section[data-section='outputs'] {
+  align-items: flex-end;
+  padding: 8px 8px 8px 4px;
+  border-radius: 0 0 7px 0;
+  background-color: var(--_band-bg);
+}
+
+/* ------------------------------------------------------------------- rows */
+
+.nm-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  min-height: 7px;
+}
+
+.nm-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.nm-section[data-section='outputs'] .nm-row,
+.nm-section[data-section='outputs'] .nm-chip,
+.nm-section[data-section='outputs'] .nm-add {
+  flex-direction: row-reverse;
+}
+
+.nm-section[data-section='parameters'] .nm-chip {
+  box-sizing: border-box;
+  padding: 2px 4px;
+  border: 1px solid var(--_chip-border);
+  border-radius: 4px;
+  background-color: var(--_chip-bg);
+  color: var(--_chip-text);
+  line-height: 9px;
+}
+
+/* ------------------------------------------------------------------ ports */
+
+.nm-port {
+  flex: none;
+  box-sizing: border-box;
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--_port-stroke);
+  border-radius: 50%;
+  background-color: var(--nano-module-port-color, var(--_port-fill));
+}
+
+.nm-section[data-section='parameters'] .nm-port {
+  border-color: var(--_chip-border);
+  background-color: var(--nano-module-port-color, var(--_chip-port-fill));
+}
+
+.nm-port:hover {
+  border-color: var(--_port-hover-io);
+  background-color: var(--_port-hover-io);
+}
+
+.nm-section[data-section='parameters'] .nm-port:hover {
+  border-color: var(--_port-hover-parameter);
+  background-color: var(--_port-hover-parameter);
+}
+
+/* ---------------------------------------------------------------- buttons */
+
+.nm-icon-button,
+.nm-add {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.nm-icon-button {
+  flex: none;
+  display: inline-flex;
+  width: 6px;
+  height: 6px;
+}
+
+.nm-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--_text-muted);
+  white-space: nowrap;
+}
+
+.nm-icon {
+  display: block;
+  flex: none;
+  width: 6px;
+  height: 6px;
+}
+
+.nm-icon-button:focus-visible,
+.nm-add:focus-visible {
+  outline: 1px solid var(--_edit-border);
+  outline-offset: 1px;
+}
+
+/* ----------------------------------------------------------------- inputs */
+
+.nm-edit {
+  display: inline-flex;
+  min-width: 0;
+}
+
+.nm-edit--title {
+  width: 120px;
+  max-width: 100%;
+}
+
+.nm-input {
+  box-sizing: border-box;
+  width: 50px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: text;
+}
+
+/* Dashed underline for the title only (FR-9). */
+.nm-input--title {
+  width: 100%;
+  padding-bottom: 1px;
+  border-bottom: 1px dashed currentColor;
+  font-weight: 600;
+  line-height: 8px;
+}
+
+.nm-input--port {
+  padding-bottom: 1px;
+  border-bottom: 1px solid currentColor;
+}

@@ -1,0 +1,169 @@
+@let node = workSpaceNode();
+@let editing = isEditMode();
+@let activeId = selectedEditId();
+@let hoverId = hoveredField();
+@let status = savingStatus();
+
+@if (editing) {
+  <div class="nm-badge" data-part="editing-badge"><span class="nm-badge__dot" aria-hidden="true"></span>Editing</div>
+}
+
+@if (showViewTooltip()) {
+  <div class="nm-tooltip nm-tooltip--module" role="tooltip" [id]="viewTooltipId">
+    <span class="nm-tooltip__line">Single click to open action menu</span>
+    <span class="nm-tooltip__line">Double click to open logic layer</span>
+  </div>
+}
+
+<div class="nm-header">
+  <div class="nm-text-wrap nm-title-wrap">
+    @if (editing && activeId === titleFieldId) {
+      <span
+        class="edit-input-wrapper nm-edit nm-edit--title"
+        (click)="$event.stopPropagation()"
+        (dblclick)="$event.stopPropagation()"
+      >
+        <input
+          #titleInput
+          nanoAutofocus
+          type="text"
+          class="nm-input nm-input--title"
+          data-part="title-input"
+          aria-label="Module title"
+          autocomplete="off"
+          [value]="draft()"
+          (input)="onFieldChange(titleChange, { index: -1, value: titleInput.value })"
+          (keyup.enter)="blurInput(titleInput)"
+          (keydown.escape)="blurInput(titleInput)"
+          (blur)="onTitleBlur(titleInput)"
+        />
+      </span>
+    } @else {
+      <span
+        class="nm-text nm-title"
+        data-part="title"
+        [class.nm-text--editable]="editing"
+        [attr.aria-describedby]="editing && hoverId === titleFieldId ? editTooltipId : null"
+        (click)="onTextClick(titleFieldId, $event)"
+        (mouseenter)="onTextEnter(titleFieldId)"
+        (mouseleave)="onTextLeave(titleFieldId)"
+        >{{ node.title }}</span
+      >
+      @if (editing && hoverId === titleFieldId) {
+        <span class="nm-tooltip nm-tooltip--text" role="tooltip" [id]="editTooltipId">Click to edit text</span>
+      }
+    }
+  </div>
+
+  <div class="nm-status-region" role="status" aria-live="polite">
+    @if (editing && status === 'saving') {
+      <span class="nm-status nm-status--saving" data-part="status">Saving changes…</span>
+    } @else if (editing && status === 'saved') {
+      <span class="nm-status nm-status--saved" data-part="status"
+        ><img class="nm-status__icon" alt="" [src]="checkIcon" />Changes saved</span
+      >
+    }
+  </div>
+</div>
+
+<div class="nm-body">
+  @for (section of sections(); track section.key) {
+    <div class="nm-section" [attr.data-section]="section.key">
+      @for (port of section.ports; track port.id) {
+        <div class="nm-row" data-part="port-row">
+          <span class="nm-chip">
+            <span
+              class="port nm-port"
+              [id]="port.id"
+              [style.--nano-module-port-color]="port.color || null"
+              (mousedown)="onPortMouseDown($event, port)"
+              (mouseup)="onPortMouseUp($event, port)"
+            ></span>
+            @if (editing && activeId === port.id) {
+              <span
+                class="edit-input-wrapper nm-edit"
+                (click)="$event.stopPropagation()"
+                (dblclick)="$event.stopPropagation()"
+              >
+                <input
+                  #portInput
+                  nanoAutofocus
+                  type="text"
+                  class="nm-input nm-input--port"
+                  data-part="port-input"
+                  autocomplete="off"
+                  [attr.aria-label]="section.label + ' name'"
+                  [value]="draft()"
+                  (input)="onFieldChange(section.key, { index: $index, value: portInput.value })"
+                  (keyup.enter)="onInputEnter(port, portInput)"
+                  (keydown.escape)="blurInput(portInput)"
+                  (blur)="onInputBlur(port, portInput)"
+                />
+              </span>
+            } @else {
+              <span class="nm-text-wrap">
+                <span
+                  class="nm-text nm-port-name"
+                  data-part="port-name"
+                  [class.nm-text--editable]="editing"
+                  [attr.aria-describedby]="editing && hoverId === port.id ? editTooltipId : null"
+                  (click)="onTextClick(port.id, $event)"
+                  (mouseenter)="onTextEnter(port.id)"
+                  (mouseleave)="onTextLeave(port.id)"
+                  >{{ port.name }}</span
+                >
+                @if (editing && hoverId === port.id) {
+                  <span class="nm-tooltip nm-tooltip--text" role="tooltip" [id]="editTooltipId"
+                    >Click to edit text</span
+                  >
+                }
+              </span>
+            }
+          </span>
+          @if (editing) {
+            <button
+              type="button"
+              class="nm-icon-button"
+              data-part="delete-port"
+              [attr.aria-label]="'Delete ' + port.name"
+              (click)="onDeleteClick(port, $event)"
+            >
+              <img class="nm-icon" alt="" [src]="deleteIcon" />
+            </button>
+          }
+        </div>
+      }
+
+      @if (editing) {
+        @if (addingSection() === section.key) {
+          <div class="nm-row nm-row--new">
+            <span
+              class="edit-input-wrapper nm-edit"
+              (click)="$event.stopPropagation()"
+              (dblclick)="$event.stopPropagation()"
+            >
+              <input
+                #newPortInput
+                nanoAutofocus
+                type="text"
+                class="nm-input nm-input--new"
+                data-part="new-port-input"
+                autocomplete="off"
+                [attr.aria-label]="'New ' + section.label + ' name'"
+                (input)="onFieldChange(newPortChange)"
+                (keyup.enter)="blurInput(newPortInput)"
+                (keydown.escape)="blurInput(newPortInput)"
+                (blur)="onNewPortBlur(section.key, newPortInput)"
+              />
+            </span>
+          </div>
+        } @else {
+          <button type="button" class="nm-add" data-part="add-port" (click)="onAddClick($event)">
+            <img class="nm-icon" alt="" [src]="addIcon" />
+            <span>Add {{ section.label }}</span>
+          </button>
+        }
+      }
+    </div>
+  }
+</div>

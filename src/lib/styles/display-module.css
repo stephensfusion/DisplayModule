@@ -1,0 +1,61 @@
+/*
+ * display-module: exported stylesheet entry point (FR-24, NFR-2).
+ * Published as `display-module/styles/display-module.css`.
+ *
+ * Theme tokens of <nano-module>. The component already carries these values
+ * as fallbacks, so importing this file is optional; import it (after bds.css)
+ * to have one place where the tokens can be read and overridden.
+ *
+ * Values are the BDS palette (bds.css 32.1.19). The BDS token each value comes
+ * from is named beside it. BDS switches its own variables with `.e-dark-mode`;
+ * <nano-module> switches with the `dark` / `light` class on the element, so
+ * the values are written out per theme here.
+ */
+
+nano-module.dark {
+  --nano-module-bg: #0c111d; /* bg-primary */
+  --nano-module-band-bg: #333741; /* bg-quaternary (Figma utility-gray-300) */
+  --nano-module-border: #333741; /* border-primary */
+  --nano-module-selected-border: #ffffff; /* fg-primary */
+  --nano-module-edit-border: #38bdf8; /* Figma edit frame (not a BDS token) */
+  --nano-module-text: #f5f5f6; /* text-primary */
+  --nano-module-text-muted: #cecfd2; /* text-secondary */
+  --nano-module-success: #47cd89; /* text-success-primary */
+  --nano-module-grip: #ffffff; /* fg-primary */
+  --nano-module-chip-bg: #1f235b; /* Figma utility-indigo-50 */
+  --nano-module-chip-border: #2d31a6; /* Figma utility-indigo-200 */
+  --nano-module-chip-text: #a4bcfd; /* Figma utility-indigo-700 */
+  --nano-module-chip-port-fill: #d0dcff; /* Figma parameter dot */
+  --nano-module-port-fill: #61646c; /* fg-senary */
+  --nano-module-port-stroke: #cecfd2; /* fg-secondary */
+  --nano-module-port-hover-parameter: #f78f08; /* fg-warning-primary */
+  --nano-module-port-hover-io: #17b169; /* fg-success-primary */
+  --nano-module-tooltip-bg: #f0f1f1; /* Figma tooltip-bg */
+  --nano-module-tooltip-text: #161b26; /* Figma tooltip-text */
+  --nano-module-badge-bg: #000000; /* base-black */
+  --nano-module-badge-text: #ffffff; /* base-white */
+}
+
+nano-module.light {
+  --nano-module-bg: #ffffff; /* bg-primary */
+  --nano-module-band-bg: #eaecf0; /* bg-quaternary */
+  --nano-module-border: #d0d5dd; /* border-primary */
+  --nano-module-selected-border: #101828; /* fg-primary */
+  --nano-module-edit-border: #065986; /* utility-info */
+  --nano-module-text: #101828; /* text-primary */
+  --nano-module-text-muted: #344054; /* text-secondary */
+  --nano-module-success: #085d3a; /* darker than text-success-primary, for 4.5:1 contrast */
+  --nano-module-grip: #101828; /* fg-primary */
+  --nano-module-chip-bg: #f9f5ff; /* utility-primary-lighter */
+  --nano-module-chip-border: #d6bbfb; /* utility-primary-light */
+  --nano-module-chip-text: #6840c6; /* text-brand-secondary */
+  --nano-module-chip-port-fill: #d6bbfb; /* utility-primary-light */
+  --nano-module-port-fill: #d0d5dd; /* fg-senary */
+  --nano-module-port-stroke: #475467; /* fg-tertiary */
+  --nano-module-port-hover-parameter: #db6803; /* fg-warning-primary */
+  --nano-module-port-hover-io: #069454; /* fg-success-primary */
+  --nano-module-tooltip-bg: #0c111d; /* utility-tooltip-bg */
+  --nano-module-tooltip-text: #ffffff; /* utility-tooltip-text */
+  --nano-module-badge-bg: #ffffff; /* base-white */
+  --nano-module-badge-text: #101828; /* text-primary */
+}
